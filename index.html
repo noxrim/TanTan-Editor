@@ -3,19 +3,37 @@
     <head>
         <title>TanTan Editor</title>
         <style type="text/css">
+            body {
+                --main-bg: #ffffff;
+                --head-bg: #dddddd;
+                --text-col: #000000;
+                --highlight: hsl(120 40% 60%);
+            }
+
+            body[darkmode] {
+                --main-bg: #000000;
+                --head-bg: #444444;
+                --text-col: #ffffff;
+                --highlight: hsl(120 40% 20%);
+            }
+
+            body {
+                color: var(--text-col);
+                background-color: var(--main-bg);
+            }
+
             #maintab {
                 border-collapse: collapse;
             }
             
             #maintab td,th {
-                border:1px solid lightgray;
+                border:1px solid var(--head-bg);
             }
 
             
             #maintab tr:nth-child(16n) td {
-                border-bottom:1px solid black;
+                border-bottom:1px solid var(--text-col);
             }
-
             
 
             #maintab th[scope=row] {
@@ -29,7 +47,7 @@
             }
 
             .highlight {
-                background-color: #80d080;
+                background-color: var(--highlight);
             }
 
             .rowbtn {
@@ -71,10 +89,15 @@
             .dante {
                 background-image: url("data:image/gif;base64,R0lGODlhIAAgAKUsAAgDAxUEBCYBATQBAg0OEBUOEQ0UEyUNEBYWFyUXGRsdIRMhHTUXGCQeIBsiJCUnKEYlKCstMTQuMSwyNDQ2OTo9QTBCPzxCRHQ1OERHSjVSTElNUU1RVXVNUVRXWmZVWVldYV1hZmRmaWdscnZ3eXd8g4aHiIaLk5aXl5uiqqenp7a2tgAA/QAA/QAA/QAA/QAA/QAA/QAA/QAA/QAA/QAA/QAA/QAA/QAA/QAA/QAA/QAA/QAA/QAA/QAA/QAA/SH5BAEKAD8ALAAAAAAgACAAAAb+wJ9wSCwaj8gksaRsOp9Q4ShK9VChoM3lmvR4OJzMpVLJOLhDzibDrlAo5S16o1KN2nASilRBk1QrJBsgHBQZJigoFQtXGiAoKoQnI24iJCQRjFQZFV4VICl3EYYUCghXXnAcJqEXFBEPCm4GURMgJHAZt4WwCAggGadQFhm4FA1ubxkEBQgjD8JPrx4ZFA8hXmHQGR6+Ua8RXl/VsLEeDwTRTq8PbGLsDw4K8+m1hheuCQwHBf2+CAZoQRlFRsKAAQIEBFiY7p86JRM4RUiocKHFhggIQCH1oGIAABYDNPO2sVqBjwBSqkzZcNMEAitjAqh3BQFImSo1osG5ssA2FQ4grAg4EuDHPAVPIpT50AHDACQjEZhS8ubBgwQQmvSLiuSVKWZQCDRUoGkIBTRFpD5EiyQIADs=");
             }
+
+            ::backdrop {
+                background-color: #000000;
+                opacity: 0.5;
+            }
         </style>
     </head>
-    <body>
-        <div style="position:fixed; background-color: lightgray; border-bottom: 1px solid gray; width: 100%; left:0; top: 0; margin: 0; padding:4px; z-index: 2;">
+    <body darkmode>
+        <div style="position:fixed; background-color: var(--head-bg); border-bottom: 1px solid gray; width: 100%; left:0; top: 0; margin: 0; padding:4px; z-index: 2;">
             <span>TanTan Editor wip</span>
             &nbsp;
             <button id="save">Save</button>
@@ -86,11 +109,11 @@
             <button id="stop">⏹️</button>
             &nbsp;
             <span id="tools">
-                <button class="tool" id="fisho"><div class="toolinner fisho">&nbsp;</div></button>
-                <button class="tool" id="fishw"><div class="toolinner fishw">&nbsp;</div></button>
-                <button class="tool" id="tree"><div class="toolinner tree">&nbsp;</div></button>
-                <button class="tool" id="dante"><div class="toolinner dante">&nbsp;</div></button>
-                <button class="tool" id="erase"><div class="toolinner erase">&nbsp;</div></button>
+                <button class="tool" id="fisho" title="Orange fish"><div class="toolinner fisho">&nbsp;</div></button>
+                <button class="tool" id="fishw" title="Trio fish"><div class="toolinner fishw">&nbsp;</div></button>
+                <button class="tool" id="tree" title="Driftwood"><div class="toolinner tree">&nbsp;</div></button>
+                <button class="tool" id="dante" title="Dante fish"><div class="toolinner dante">&nbsp;</div></button>
+                <button class="tool" id="erase" title="Erase"><div class="toolinner erase">&nbsp;</div></button>
             </span>
             &nbsp;
             <span>Tempo</span>
@@ -100,17 +123,19 @@
             <input id="loadmusform" type="file" accept=".WAV" style="display: none;">
             <audio id="mus" style=display:none;></audio>
             <span id="musname">[none]</span>
-            &nbsp;
-            <input id="scroll" type="checkbox" checked>
-            <label for="scroll">Scroll with playback</label>
-            &nbsp;
-            <label for="musvol">Music:</label>
-            <input id="musvol" type="range" min="0" max="0.5" value="0.25" step="any">
-            <label for="hitvol">Hitsounds:</label>
-            <input id="hitvol" type="range" min="0" max="0.5" value="0.25" step="any">
+            <a id="dark" style="float:right; padding-right:20px; cursor: pointer;">☀️</a>
+            <div>
+                <input id="scroll" type="checkbox" checked>
+                <label for="scroll">Scroll with playback</label>
+                &nbsp;
+                <label for="musvol">Music:</label>
+                <input id="musvol" type="range" min="0" max="0.5" value="0.25" step="any">
+                <label for="hitvol">Hitsounds:</label>
+                <input id="hitvol" type="range" min="0" max="0.5" value="0.25" step="any">
+            </div>
         </div>
 
-        <table id="maintab" style="margin-top: 3em; margin-bottom: 1em; align-self: center;">
+        <table id="maintab" align="center" style="margin-top: 6em; margin-bottom: 1em; align-self: center;">
             <thead>
                 <tr>
                     <th scope="row" style="min-width:2em;"></th>
@@ -128,9 +153,35 @@
             </tbody>
         </table>
 
-        <button id="add">+ Add</button>
-        <input id="addbars" type="number" placeholder="0" min="0" style="width:3em">
-        <span>bars</span>
+        <span style="display:block; text-align:center;">
+            <button id="add">+ Add</button>
+            <input id="addbars" type="number" placeholder="0" min="0" style="width:3em">
+            <span>bars</span>
+        </span>
+
+        <dialog>
+            <h1>TanTan Editor</h1>
+            <p>
+                Welcome to my TanTan Teo chart editor!
+            </p>
+            <p>
+                Currently it only supports editing charts for the fishing minigame (scene 1) but<br>
+                support for other game modes will be added in the future.
+            </p>
+            <p>
+                To get started, use the Load BGM button to load some background music<br>
+                and then you can create a chart from scratch or load one from the base game.<br>
+            </p>
+            <p>
+                TanTan Teo stores its charts in <code>DATA/SCORE/*.RTM</code> and music in <code>DATA/SCENE#/*.WAV</code>.<br>
+                If you have any other questions about the game or the editor just ask me on discord.
+            </p>
+            <p>Hope this tool inspires people to start creating custom charts for this game!</p>
+            <p>-noxrim</p>
+            <form method="dialog">
+                <button>Close</button>
+            </form>
+        </dialog>
 
         <script type="text/javascript">
             const maintab = document.getElementById("maintab")
@@ -152,6 +203,7 @@
             const scroll = document.getElementById("scroll")
             const musvol = document.getElementById("musvol")
             const hitvol = document.getElementById("hitvol")
+            const dark = document.getElementById("dark")
 
             let stopanim = false
             let prevRow
@@ -180,11 +232,15 @@
                 playbtn.textContent = "▶️"
                 playbtn.classList.add("rowbtn")
                 playbtn.onclick = () => {
-                    var index = Array.prototype.indexOf.call(mainbod.children, row);
-                    stop();
-                    mus.currentTime = (((index+16)*(60/tempo.value))*0.25);
-                    mus.play();
-                    pauseplay.textContent = "⏸️"
+                    if (mus.src == "") {
+                        alert("Please load BGM first")
+                    } else {
+                        var index = Array.prototype.indexOf.call(mainbod.children, row);
+                        stop();
+                        mus.currentTime = (((index+16)*(60/tempo.value))*0.25);
+                        mus.play();
+                        pauseplay.textContent = "⏸️"
+                    }
                 }
                 row.appendChild(playhdr)
                 playhdr.appendChild(playbtn)
@@ -288,7 +344,6 @@
 
                     for (let i=0; i<2; i++) {
                         if (sides[i].firstChild.classList.contains("fisho") || sides[i].firstChild.classList.contains("fishw")) {
-                            console.log("!")
                             let lul = audioCtx.createBufferSource()
                             lul.buffer = i==0 ? hitsl : hitsr;
                             lul.connect(hitGain);
@@ -430,7 +485,6 @@
             for (let i = 0; i < tools.children.length; i++) {
                 tools.children[i].onclick = () => {
                     selectedTool = tools.children[i].id
-                    console.log(selectedTool)
                 }
             }
 
@@ -457,6 +511,12 @@
                 audioCtxSetup();
                 hitGain.gain.value = hitvol.value;
             })
+
+            dark.onclick = () => {
+                document.body.toggleAttribute("darkmode") ? dark.innerText = "☀️" : dark.innerText = "🌙"
+            }
+
+            document.querySelector("dialog").showModal();
 
             for (let i = 0; i < 16; i++) addRow("0000,0000")
             
