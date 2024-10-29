@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta charset="UTF-8">
         <title>TanTan Editor</title>
         <style type="text/css">
             body {
@@ -54,7 +55,7 @@
                 cursor: pointer;
             }
 
-            .note {
+            .note-container div {
                 width:2em;
                 height:2em;
                 background-size: contain;
@@ -90,6 +91,37 @@
                 background-image: url("data:image/gif;base64,R0lGODlhIAAgAKUsAAgDAxUEBCYBATQBAg0OEBUOEQ0UEyUNEBYWFyUXGRsdIRMhHTUXGCQeIBsiJCUnKEYlKCstMTQuMSwyNDQ2OTo9QTBCPzxCRHQ1OERHSjVSTElNUU1RVXVNUVRXWmZVWVldYV1hZmRmaWdscnZ3eXd8g4aHiIaLk5aXl5uiqqenp7a2tgAA/QAA/QAA/QAA/QAA/QAA/QAA/QAA/QAA/QAA/QAA/QAA/QAA/QAA/QAA/QAA/QAA/QAA/QAA/QAA/SH5BAEKAD8ALAAAAAAgACAAAAb+wJ9wSCwaj8gksaRsOp9Q4ShK9VChoM3lmvR4OJzMpVLJOLhDzibDrlAo5S16o1KN2nASilRBk1QrJBsgHBQZJigoFQtXGiAoKoQnI24iJCQRjFQZFV4VICl3EYYUCghXXnAcJqEXFBEPCm4GURMgJHAZt4WwCAggGadQFhm4FA1ubxkEBQgjD8JPrx4ZFA8hXmHQGR6+Ua8RXl/VsLEeDwTRTq8PbGLsDw4K8+m1hheuCQwHBf2+CAZoQRlFRsKAAQIEBFiY7p86JRM4RUiocKHFhggIQCH1oGIAABYDNPO2sVqBjwBSqkzZcNMEAitjAqh3BQFImSo1osG5ssA2FQ4grAg4EuDHPAVPIpT50AHDACQjEZhS8ubBgwQQmvSLiuSVKWZQCDRUoGkIBTRFpD5EiyQIADs=");
             }
 
+            .drum1 {
+                background-color: lightgreen;
+            }
+            .drum2 {
+                background-color: hotpink;
+            }
+            .drum3 {
+                background-color: blue;
+
+            }
+            .drum4 {
+                background-color: cyan;
+
+            }
+            .drum5 {
+                background-color: darkorange;
+
+            }
+            .drum6 {
+                background-color: magenta;
+
+            }
+            .drum7 {
+                background-color: yellow;
+
+            }
+
+            .drumhit {
+                background-color: white;
+            }
+
             ::backdrop {
                 background-color: #000000;
                 opacity: 0.5;
@@ -109,11 +141,45 @@
             <button id="stop">⏹️</button>
             &nbsp;
             <span id="tools">
-                <button class="tool" id="fisho" title="Orange fish"><div class="toolinner fisho">&nbsp;</div></button>
-                <button class="tool" id="fishw" title="Trio fish"><div class="toolinner fishw">&nbsp;</div></button>
-                <button class="tool" id="tree" title="Driftwood"><div class="toolinner tree">&nbsp;</div></button>
-                <button class="tool" id="dante" title="Dante fish"><div class="toolinner dante">&nbsp;</div></button>
-                <button class="tool" id="erase" title="Erase"><div class="toolinner erase">&nbsp;</div></button>
+                <button class="tool fishing" id="fisho" title="Orange fish">
+                    <div class="toolinner fisho">&nbsp;</div>
+                </button>
+                <button class="tool fishing" id="fishw" title="Trio fish">
+                    <div class="toolinner fishw">&nbsp;</div>
+                </button>
+                <button class="tool fishing" id="tree" title="Driftwood">
+                    <div class="toolinner tree">&nbsp;</div>
+                </button>
+                <button class="tool fishing" id="dante" title="Dante fish">
+                    <div class="toolinner dante">&nbsp;</div>
+                </button>
+                <button class="tool drum-player" id="drum1" title="Green note" style="display:none;">
+                    <div class="toolinner drum1">&nbsp;</div>
+                </button>
+                <button class="tool drum-player" id="drum2" title="Pink note" style="display:none;">
+                    <div class="toolinner drum2">&nbsp;</div>
+                </button>
+                <button class="tool drum-player" id="drum3" title="Blue note" style="display:none;">
+                    <div class="toolinner drum3">&nbsp;</div>
+                </button>
+                <button class="tool drum-player" id="drum4" title="Cyan note" style="display:none;">
+                    <div class="toolinner drum4">&nbsp;</div>
+                </button>
+                <button class="tool drum-player" id="drum5" title="Orange note" style="display:none;">
+                    <div class="toolinner drum5">&nbsp;</div>
+                </button>
+                <button class="tool drum-player" id="drum6" title="Magenta note" style="display:none;">
+                    <div class="toolinner drum6">&nbsp;</div>
+                </button>
+                <button class="tool drum-player" id="drum7" title="Yellow note" style="display:none;">
+                    <div class="toolinner drum7">&nbsp;</div>
+                </button>
+                <button class="tool drum-enemy" id="drumhit" title="Drum hit" style="display:none;">
+                    <div class="toolinner drumhit">&nbsp;</div>
+                </button>
+                <button class="tool" id="erase" title="Erase">
+                    <div class="toolinner erase">&nbsp;</div>
+                </button>
             </span>
             &nbsp;
             <span>Tempo</span>
@@ -123,6 +189,13 @@
             <input id="loadmusform" type="file" accept=".WAV" style="display: none;">
             <audio id="mus" style=display:none;></audio>
             <span id="musname">[none]</span>
+            &nbsp;
+            <span>Mode</span>
+            <select id="mode"> 
+                <option value="fishing" selected>Fishing (SCENE1)</option>
+                <option value="drum-player">Drums - Player (SCENE3,4)</option>
+                <option value="drum-enemy">Drums - Enemy (SCENE3,4,5)</option>
+            </select>
             <a id="dark" style="float:right; padding-right:20px; cursor: pointer;">☀️</a>
             <div>
                 <input id="scroll" type="checkbox" checked>
@@ -131,6 +204,11 @@
                 <label for="musvol">Music:</label>
                 <input id="musvol" type="range" min="0" max="0.5" value="0.25" step="any">
                 <label for="hitvol">Hitsounds:</label>
+                <select id="hitsound">
+                    <option value="fish" selected>Fish</option>
+                    <option value="drum">Drum</option>
+                    <option value="splash">Splash</option>
+                </select>
                 <input id="hitvol" type="range" min="0" max="0.5" value="0.25" step="any">
             </div>
         </div>
@@ -202,24 +280,64 @@
             const tools = document.getElementById("tools")
             const scroll = document.getElementById("scroll")
             const musvol = document.getElementById("musvol")
+            const hitsound = document.getElementById("hitsound")
             const hitvol = document.getElementById("hitvol")
             const dark = document.getElementById("dark")
+            const mode = document.getElementById("mode")
 
             let stopanim = false
             let prevRow
             let selectedTool = "fisho"
+            let prevMode = mode.value
 
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            let audioCtx;
-            let musGain;
-            let hitGain;
-            let hitsl;
-            let hitsr;
-            let druml;
-            let drumr;
-            let splash;
+            const AudioContext = window.AudioContext || window.webkitAudioContext
+            let audioCtx
+            let musGain
+            let hitGain
+            let hitsl
+            let hitsr
+            let druml
+            let drumr
+            let splash
 
             let played = {}
+
+            const shouldHitNoteMap = {
+                "fisho":  true,
+                "fishw":  true,
+                "dante":  false,
+                "tree":   false,
+                
+                "drum1":  true,
+                "drum2":  true,
+                "drum3":  true,
+                "drum4":  true,
+                "drum5":  true,
+                "drum6":  true,
+                "drum7":  true,
+
+                "drumhit": true,
+            }
+
+            const defaultNoteMap = {
+                "fishing": "fisho",
+                "drum-player": "drum1",
+                "drum-enemy": "drumhit"
+            }
+
+            function loopRows(loopFunc) {
+                for (let i = 0; i < mainbod.children.length; i++) {
+                    loopFunc(i, mainbod.children[i])
+                }
+            }
+
+            function loopColumns(row, loopFunc) {
+                let cols = Array.prototype.slice.call(row.children)
+                cols = cols.filter((obj) => {return obj.nodeName == "TD"})
+                for (let i=0; i<cols.length; i++) {
+                    loopFunc(i, cols[i].firstChild)
+                }
+            }
 
             function addRow(line, before) {
                 let sides = line.split(",")
@@ -235,10 +353,10 @@
                     if (mus.src == "") {
                         alert("Please load BGM first")
                     } else {
-                        var index = Array.prototype.indexOf.call(mainbod.children, row);
-                        stop();
-                        mus.currentTime = (((index+16)*(60/tempo.value))*0.25);
-                        mus.play();
+                        var index = Array.prototype.indexOf.call(mainbod.children, row)
+                        stop()
+                        mus.currentTime = (((index+16)*(60/tempo.value))*0.25)
+                        mus.play()
                         pauseplay.textContent = "⏸️"
                     }
                 }
@@ -249,24 +367,39 @@
                     let td = document.createElement("td")
                     let div = document.createElement("div")
 
-                    div.classList.add("note")
+                    td.classList.add("note-container")
 
-                    if (sides[side].charAt(3) != "0") {
-                        div.classList.add("fisho")
-                    } else if (sides[side].charAt(2) != "0") {
-                        div.classList.add("fishw")
-                    } else if (sides[side].charAt(0) == "1") {
-                        div.classList.add("dante")
-                    } else if (sides[side].charAt(0) == "2") {
-                        div.classList.add("tree")
+                    switch (mode.value) {
+                        case "fishing":
+                            if (sides[side].charAt(3) != "0") {
+                                div.classList.add("fisho")
+                            } else if (sides[side].charAt(2) != "0") {
+                                div.classList.add("fishw")
+                            } else if (sides[side].charAt(0) == "1") {
+                                div.classList.add("dante")
+                            } else if (sides[side].charAt(0) == "2") {
+                                div.classList.add("tree")
+                            }
+                            break
+                        case "drum-player":
+                            if (sides[side].charAt(3) != "0") {
+                                div.classList.add("drum"+sides[side].charAt(3))
+                            }
+                            break
+                        case "drum-enemy":
+                            if (sides[side].charAt(3) != "0") {
+                                div.classList.add("drumhit")
+                            }
+                            break
                     }
+                  
 
-                    let preview;
+                    let preview
 
                     div.addEventListener("mouseenter", () => {
                         if (selectedTool != "erase") {
                             preview = document.createElement("div")
-                            preview.className = "note "+selectedTool
+                            preview.className = selectedTool
                             preview.style.setProperty("opacity", "50%")
                             div.appendChild(preview)
                         } else {
@@ -281,9 +414,9 @@
 
                     div.onclick = () => {
                         if (selectedTool != "erase") { 
-                            div.className = "note "+selectedTool
+                            div.className = selectedTool
                         } else {
-                            div.className = "note"
+                            div.className = ""
                         }
                     }
 
@@ -337,24 +470,34 @@
 
                 //this assumes each row is rendered for at least 1 frame
                 if (nextRow != null && played[r+1] == null) {
-                    let nextrowstart = ((60/tempo.value)*0.25)*(r+17);
+                    let nextrowstart = ((60/tempo.value)*0.25)*(r+17)
                     
                     let sides = Array.prototype.slice.call(nextRow.children)
                     sides = sides.filter((obj) => {return obj.nodeName == "TD"})
 
                     for (let i=0; i<2; i++) {
-                        if (sides[i].firstChild.classList.contains("fisho") || sides[i].firstChild.classList.contains("fishw")) {
+                        if (shouldHitNoteMap[sides[i].firstChild.className]) {
                             let lul = audioCtx.createBufferSource()
-                            lul.buffer = i==0 ? hitsl : hitsr;
-                            lul.connect(hitGain);
+                            switch (hitsound.value) {
+                                case "fish":
+                                    lul.buffer = i==0 ? hitsl : hitsr
+                                    break
+                                case "drum":
+                                    lul.buffer = i==0 ? druml : drumr
+                                    break
+                                case "splash":
+                                    lul.buffer = splash
+                                    break
+                            }
+                            lul.connect(hitGain)
                             lul.start(audioCtx.currentTime + (nextrowstart - mus.currentTime))
                         }
                     }
-                    played[r+1] = true;
+                    played[r+1] = true
                 }
 
-                prevRow = curRow;
-                if (mus.paused) return;
+                prevRow = curRow
+                if (mus.paused) return
 
                 requestAnimationFrame(animate)
             }
@@ -369,13 +512,13 @@
 
             function audioCtxSetup() {
                 if (audioCtx == null) {
-                    audioCtx = new AudioContext();
+                    audioCtx = new AudioContext()
                     
-                    musGain = audioCtx.createGain();
-                    hitGain = audioCtx.createGain();
+                    musGain = audioCtx.createGain()
+                    hitGain = audioCtx.createGain()
 
-                    musGain.gain.value = musvol.value;
-                    hitGain.gain.value = hitvol.value;
+                    musGain.gain.value = musvol.value
+                    hitGain.gain.value = hitvol.value
 
                     fetch("HITSL.WAV").then(res => res.arrayBuffer()).then(buf => audioCtx.decodeAudioData(buf)).then(buf => hitsl = buf)
                     fetch("HITSR.WAV").then(res => res.arrayBuffer()).then(buf => audioCtx.decodeAudioData(buf)).then(buf => hitsr = buf)
@@ -383,14 +526,14 @@
                     fetch("DRUMR.WAV").then(res => res.arrayBuffer()).then(buf => audioCtx.decodeAudioData(buf)).then(buf => drumr = buf)
                     fetch("SPLASH.WAV").then(res => res.arrayBuffer()).then(buf => audioCtx.decodeAudioData(buf)).then(buf => splash = buf)
                     
-                    audioCtx.createMediaElementSource(mus).connect(musGain);
+                    audioCtx.createMediaElementSource(mus).connect(musGain)
 
-                    musGain.connect(audioCtx.destination);
-                    hitGain.connect(audioCtx.destination);
+                    musGain.connect(audioCtx.destination)
+                    hitGain.connect(audioCtx.destination)
 
                 }
 
-                return audioCtx;
+                return audioCtx
             }
 
             load.onclick = () => {
@@ -400,7 +543,7 @@
             loadform.addEventListener("change", () => {
                 if (loadform.files.length == 1) {
                     while (mainbod.firstChild) {
-                        mainbod.removeChild(mainbod.firstChild);
+                        mainbod.removeChild(mainbod.firstChild)
                     }
 
                     loadform.files[0].text().then((chart) => {
@@ -424,9 +567,9 @@
 
             loadmusform.addEventListener("change", () => {
                 if (loadmusform.files.length == 1) {
-                    audioCtxSetup();
-                    mus.src = URL.createObjectURL(loadmusform.files[0]);
-                    musname.textContent = loadmusform.files[0].name;
+                    audioCtxSetup()
+                    mus.src = URL.createObjectURL(loadmusform.files[0])
+                    musname.textContent = loadmusform.files[0].name
                 }
             })
 
@@ -436,28 +579,48 @@
                 chart += "#Tempo="+tempo.value+"\n"
                 chart += "Elapse="+ Math.round((60/tempo.value)*250*1000)/1000 +"\n\n"
 
-                for (let i = 0; i < mainbod.children.length; i++) {
-                    let row = mainbod.children[i]
-                    let sides = Array.prototype.slice.call(row.children)
-                    sides = sides.filter((obj) => {return obj.nodeName == "TD"})
-                    if (sides.length == 2) {
-                        for (let j=0; j<2; j++) {
-                            if (sides[j].firstChild.classList.contains("fisho")) {
-                                chart += (j==0 ? "0001" : "0005")
-                            } else if (sides[j].firstChild.classList.contains("fishw")) {
-                                chart += (j==0 ? "0010" : "0050")
-                            } else if (sides[j].firstChild.classList.contains("tree")) {
-                                chart += "2000"
-                            } else if (sides[j].firstChild.classList.contains("dante")) {
-                                chart += "1000"
-                            } else {
-                                chart += "0000"
-                            }
-                            if (j==0) {chart += ","}
-                            else {chart += "\n"}
+                loopRows((rowNum, row) => {
+                    loopColumns(row, (colNum, col) => {
+                        switch (mode.value) { 
+                            case "fishing":
+                                if (col.classList.contains("fisho")) {
+                                    chart += (colNum==0 ? "0001" : "0005") 
+                                } else if (col.classList.contains("fishw")) {
+                                    chart += (colNum==0 ? "0010" : "0050")
+                                } else if (col.classList.contains("tree")) {
+                                    chart += "2000"
+                                } else if (col.classList.contains("dante")) {
+                                    chart += "1000"
+                                } else {
+                                    chart += "0000"
+                                }
+                                break
+                            case "drum-player":
+                                let found = false
+
+                                col.classList.forEach(className => {
+                                    if (className.startsWith("drum")) {
+                                        chart += "000"+className.at(4)
+                                        found = true
+                                    }
+                                })
+
+                                if (!found) chart += "0000"
+
+                                break
+                            case "drum-enemy":
+                                if (col.classList.contains("drumhit")) {
+                                    chart += (colNum==0 ? "0001" : "0005") 
+                                } else {
+                                    chart += "0000"
+                                }
+                                break
                         }
-                    }
-                }
+
+                        colNum==0 ? (chart += ",") : (chart += "\n")
+                        
+                    })
+                })
 
                 saveif.href = "data:binary/octet-stream;base64,"+btoa(chart)
                 saveif.click() 
@@ -466,7 +629,7 @@
             stopbtn.onclick = stop
 
             pauseplay.onclick = () => {
-                audioCtxSetup();
+                audioCtxSetup()
                 if (mus.src == "") {
                     alert("Please load BGM first")
                 } else {
@@ -503,20 +666,91 @@
             })
 
             musvol.addEventListener("input", () => {
-                audioCtxSetup();
-                musGain.gain.value = musvol.value;
+                audioCtxSetup()
+                musGain.gain.value = musvol.value
             })
 
             hitvol.addEventListener("input", () => {
-                audioCtxSetup();
-                hitGain.gain.value = hitvol.value;
+                audioCtxSetup()
+                hitGain.gain.value = hitvol.value
+            })
+
+            mode.addEventListener("change", () => {
+                let newMode = mode.value
+
+                if (newMode != prevMode) {
+                    let hasanynotes = false
+
+                    for (let i = 0; i < mainbod.children.length; i++) {
+                        let row = mainbod.children[i]
+                        let sides = Array.prototype.slice.call(row.children)
+                        sides = sides.filter((obj) => {return obj.nodeName == "TD"})
+                        for (let j=0; j<2; j++) {
+                            if (sides[j].firstChild.classList.length > 0) {
+                                hasanynotes = true
+                                break
+                            }
+                        }
+                    }
+
+                    let shouldSwitch = false
+
+                    if (hasanynotes) {
+                        if (confirm("Switching modes will convert the current chart to the new mode.\nThis may cause data loss.\nContinue?")) {
+                            shouldSwitch = true
+                        }
+                    } else {
+                        shouldSwitch = true
+                    }
+
+                    if (shouldSwitch) {
+                        //hide tools for other modes
+                        for (let tool of document.getElementsByClassName("tool")) {
+                            if (tool.id != "erase") tool.style = "display:none;"
+                        }
+                        for (let tool of document.getElementsByClassName("tool "+newMode)) {
+                            tool.style = ""
+                        }
+
+                        //convert chart
+                        loopRows((rowNum, row) => {
+                            loopColumns(row, (colNum, col) => {
+                                if (col.classList.length > 0) {
+                                    if (shouldHitNoteMap[col.className]) {
+                                        col.className = defaultNoteMap[newMode]
+                                    } else {
+                                        col.className = ""
+                                    }
+                                }
+                            })
+                        })
+
+                        //finalize
+
+                        switch (newMode) {
+                            case "fishing":
+                                hitsound.value = "fish"
+                            case "drum-player":
+                                hitsound.value = "drum"
+                            case "drum-enemy":
+                                hitsound.value = "drum"
+                        }
+
+                        prevMode = newMode
+
+
+                    } else {
+                        mode.value = prevMode
+                    }
+
+                }
             })
 
             dark.onclick = () => {
                 document.body.toggleAttribute("darkmode") ? dark.innerText = "☀️" : dark.innerText = "🌙"
             }
 
-            document.querySelector("dialog").showModal();
+            document.querySelector("dialog").showModal()
 
             for (let i = 0; i < 16; i++) addRow("0000,0000")
             
